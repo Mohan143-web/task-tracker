@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: html(title='Dashboard', content=~{::main})}">
+<body>
+<main>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Dashboard</h2>
+        <a th:href="@{/tasks/new}" class="btn btn-primary">+ New Task</a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3"><div class="card text-center"><div class="card-body">
+            <h6 class="text-muted">Total</h6><h3 th:text="${stats.total}">0</h3>
+        </div></div></div>
+        <div class="col-md-3"><div class="card text-center border-secondary"><div class="card-body">
+            <h6 class="text-muted">To Do</h6><h3 th:text="${stats.todo}">0</h3>
+        </div></div></div>
+        <div class="col-md-3"><div class="card text-center border-warning"><div class="card-body">
+            <h6 class="text-muted">In Progress</h6><h3 th:text="${stats.inProgress}">0</h3>
+        </div></div></div>
+        <div class="col-md-3"><div class="card text-center border-success"><div class="card-body">
+            <h6 class="text-muted">Done</h6><h3 th:text="${stats.done}">0</h3>
+        </div></div></div>
+    </div>
+
+    <div th:if="${stats.overdue > 0}" class="alert alert-danger">
+        You have <strong th:text="${stats.overdue}">0</strong> overdue task(s).
+    </div>
+
+    <h4>My Tasks</h4>
+    <div th:if="${#lists.isEmpty(tasks)}" class="alert alert-info">
+        No tasks yet. <a th:href="@{/tasks/new}">Create your first one</a>.
+    </div>
+    <table th:unless="${#lists.isEmpty(tasks)}" class="table table-hover align-middle">
+        <thead>
+            <tr><th>Title</th><th>Status</th><th>Due</th><th>Created</th><th></th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="t : ${tasks}" th:classappend="${t.overdue} ? 'table-danger' : ''">
+                <td>
+                    <strong th:text="${t.title}">Title</strong>
+                    <div class="small text-muted" th:text="${t.description}">desc</div>
+                </td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${t.status.name() == 'DONE'} ? 'bg-success' : (${t.status.name() == 'IN_PROGRESS'} ? 'bg-warning text-dark' : 'bg-secondary')"
+                          th:text="${t.status}">TODO</span>
+                </td>
+                <td th:text="${t.dueDate} ?: '—'">2026-01-01</td>
+                <td th:text="${#temporals.format(t.createdAt, 'yyyy-MM-dd HH:mm')}">2026-01-01</td>
+                <td class="text-end">
+                    <a th:href="@{|/tasks/${t.id}/edit|}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <form th:action="@{|/tasks/${t.id}/delete|}" method="post" class="d-inline">
+                        <button class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Delete this task?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
