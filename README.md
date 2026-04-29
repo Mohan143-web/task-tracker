@@ -3,13 +3,16 @@
 A Spring Boot full-stack task management app. Users register/sign in, create tasks
 with status and due dates, and see a dashboard summarising their workload.
 
-## Deploy
+## 🚀 Live demo
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Mohan143-web/task-tracker)
+**https://task-tracker-i7a0.onrender.com**
 
-Click the button above (free Render account required). The app will build from
-the included `Dockerfile` and `render.yaml`. First boot takes ~5 min; the free
-instance sleeps after 15 min idle and cold-starts on next request.
+Register a new account (any username/password ≥ 4 chars) and sign in.
+Hosted on Render's free tier — first request after 15 min of idle takes
+~30 s to wake the dyno; subsequent requests are instant. The H2 in-memory
+database is recreated on each restart, so demo data is ephemeral.
+
+[![Deploy your own to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Mohan143-web/task-tracker)
 
 ## Tech stack
 - Spring Boot 2.7.18 (Java 16)
